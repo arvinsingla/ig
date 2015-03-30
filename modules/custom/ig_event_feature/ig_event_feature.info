@@ -1,7 +1,7 @@
-name = IG Event
+name = Instagram Event
 description = Instagram event
 core = 7.x
-package = Features
+package = Instagram
 version = 7.x-1.0
 project = ig_event_feature
 dependencies[] = features
