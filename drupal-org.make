@@ -23,9 +23,8 @@ projects[entityreference][subdir] = "contrib"
 
 projects[instagram][subdir] = "contrib"
 projects[instagram][download][type] = "git"
-projects[instagram][download][url] = "http://git.drupal.org/project/environment.git"
-projects[instagram][download][revision] = "7ebc9c62651d15460bd86b93cb2148b57b7fcfb0"
-projects[instagram][download][branch] = "7.x-1.x"
+projects[instagram][download][url] = "https://github.com/arvinsingla/instagram-drupal.git"
+projects[instagram][download][branch] = "master"
 
 projects[diff][version] = "3.2"
 projects[diff][type] = "module"
@@ -47,21 +46,15 @@ projects[rules][version] = "2.7"
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
 
-projects[rules_conditional][branch] = "7.x-1.x"
-projects[rules_conditional][type] = "git"
-projects[rules_conditional][subdir] = "contrib"
-projects[rules_conditional][download][url] = "http://git.drupal.org/project/rules_conditional.git"
-projects[rules_conditional][download][revision] = c5f396fc71dae128da0afa0e705d5649157f3bb0
-
 projects[strongarm][version] = "2.0"
 projects[strongarm][type] = "module"
 projects[strongarm][subdir] = "contrib"
 
 projects[views][version] = "3.10"
 projects[views][type] = "module"
-projects[views][subdir] = "contrib
+projects[views][subdir] = "contrib"
 
-projects[views_datasource][version] = "7.x-1.0-alpha2"
+projects[views_datasource][version] = "1.0-alpha2"
 projects[views_datasource][type] = "module"
 projects[views_datasource][subdir] = "contrib"
 
