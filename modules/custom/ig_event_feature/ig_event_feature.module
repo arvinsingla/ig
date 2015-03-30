@@ -1,0 +1,30 @@
+<?php
+/**
+ * @file
+ * Code for the IG Event feature.
+ */
+
+include_once 'ig_event_feature.features.inc';
+
+/**
+ * Implements hook_form_FORMID_alter().
+ */
+function ig_event_feature_form_event_node_form_alter(&$form, &$form_state, $form_id) {
+  $form['#validate'][] = 'ig_event_feature_initialize_subscription';
+}
+
+/**
+ * Custom validation function to perform subscription to Instagram API service.
+ */
+function ig_event_feature_initialize_subscription($form, &$form_state) {
+  // @todo perform hashtag validation.
+  $instagram_api = instagram_get_api();
+  $event = $instagram_api->subscribe($form_state['values']['field_event_hashtag'][LANGUAGE_NONE][0]['value'], 'tag');
+  // Assign the Instagram subscription id to our node.
+  if ($event) {
+    $form_state['values']['field_event_id'][LANGUAGE_NONE][0]['value'] = $event['id'];
+  }
+  else {
+    form_set_error(NULL, t('There was an error processing your request. Please try again later'));
+  }
+}

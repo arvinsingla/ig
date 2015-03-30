@@ -1,0 +1,62 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the staples installation profile.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function staples_install() {
+  // Run Environment Switch on install.
+  /*
+  $environment = variable_get('environment');
+  if (module_enable(array('environment'))) {
+    environment_switch($environment, TRUE);
+  }
+  */
+
+  $default_theme = 'seven';
+  // Make sure that "seven" theme is enabled.
+  theme_enable(array($default_theme));
+  // Set seven as the theme default.
+  variable_set('theme_default', $default_theme);
+
+  
+  // For each theme configure favicon path.
+  /*
+  $theme_names = array('seven', 'bartik');
+  foreach ($theme_names as $name) {
+    $var_name = 'theme_' . $name . '_settings';
+    $settings = variable_get($var_name, array());
+    $settings['favicon_path'] = 'profiles/staples/images/favicon.ico';
+    $settings['default_favicon'] = 0;
+    variable_set($var_name, $settings);
+  }
+  */
+
+  // Administrator role setting to allow this role to have full permissions.
+  /*
+  $admin = user_role_load_by_name('administrator');
+  if (!empty($admin)) {
+    variable_set('user_admin_role', $admin->rid);
+    user_role_grant_permissions($admin->rid, array_keys(module_invoke_all('permission')));
+  }
+  */
+
+  // This is a new option in Features, called "Features lock mode"
+  // and by default "Prevent rebuild and revert" is selected. With this
+  // we set "Allow rebuild (prevent revert)" to be the default.
+  variable_set('features_lock_mode', 'rebuild');
+
+  // Ensure all features are reverted.
+  if (module_exists('features')) {
+    $features = features_get_info('feature');
+    // Iterate through and revert all enabled features.
+    foreach ($features as $id => $feature) {
+      if ($feature->status) {
+        features_revert_module($id);
+      }
+    }
+  }
+}

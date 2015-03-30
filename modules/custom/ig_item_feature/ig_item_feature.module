@@ -1,0 +1,49 @@
+<?php
+/**
+ * @file
+ * Code for the Instragram Item feature.
+ */
+
+include_once 'ig_item_feature.features.inc';
+
+/**
+ * Implements hook_instagram_process_new().
+ */
+function ig_item_feature_instagram_process_new($media, $event) {
+
+  // @todo Optimize to only act when media is present.
+
+  // Fetch the event for this interaction.
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'event')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    // @todo only act on active events
+    ->fieldCondition('field_event_id', 'value', $event['subscription_id'], '=');
+  $result = $query->execute();
+
+  if (!empty($result['node'])) {
+    $ids = array_keys($result['node']);
+    // Iterate on media items and create nodes.
+    foreach ($media as $item) {
+      $values = array(
+        'type' => 'ig',
+        'uid' => 0,
+        'status' => 1,
+        'comment' => 0,
+        'promote' => 0,
+        'created' => $media['created_time'],
+      );
+      $entity = entity_create('node', $values);
+      $ewrapper = entity_metadata_wrapper('node', $entity);
+      $ewrapper->title->set($item['id']);
+      $ewrapper->field_ig_caption->set($item['caption']['text']);
+      $ewrapper->field_ig_fullname->set($item['user']['full_name']);
+      $ewrapper->field_ig_username->set($item['user']['user_name']);
+      $ewrapper->field_ig_profile->set($item['user']['profile_picture']);
+      $ewrapper->field_ig_item->set($item['images']['standard_resolution']['url']);
+      $ewrapper->field_ig_event->set($ids);
+      $ewrapper->save();
+    }
+  }
+}
