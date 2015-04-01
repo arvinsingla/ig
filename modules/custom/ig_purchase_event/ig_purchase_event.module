@@ -10,7 +10,7 @@
  */
 function ig_purchase_event_menu() {
   $items['create'] = array(
-    'title' => t('Create Instagram Event'),
+    'title' => 'Create Instagram Event',
     'description' => 'Configuration, and testing',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ig_purchase_event_form'),
@@ -19,19 +19,48 @@ function ig_purchase_event_menu() {
   return $items;
 }
 
-function ig_purchase_event_form() {
+/**
+ * Custom form for event purchasing.
+ */
+function ig_purchase_event_form($form, &$form_state) {
   global $user;
-  $mail = '';
-  if (!empty($user->mail)) {
-    $mail = $user->mail;
-  }
+
+  $setting = array();
+  $setting['stripeform'] = array(
+    'pubkey' => variable_get('stripe_test_publishable'),
+    'form_selector' => str_replace('_', '-', __FUNCTION__),
+  );
+
+  $form['#attached'] = array(
+    'js' => array(
+      array('data' => $setting, 'type' => 'setting'),
+    ),
+    'library' => array(
+      array('ig_purchase_event', 'stripe'),
+    ),
+  );
+
+  // Special hidden element for stripe purchasing.
+  $form['stripeToken'] = array(
+    '#type' => 'hidden',
+    '#value' => !empty($form_state['input']['stripeToken']) ? $form_state['input']['stripeToken'] : NULL,
+  );
 
   $form['event'] = array(
     '#type' => 'fieldset',
     '#title' => t('Event Details'),
-    '#tree' => TRUE,
+    '#tree' => FALSE,
   );
   $form['event'] += element_info('fieldset');
+
+  if ($user->uid === 0) {
+    $form['event']['email'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Email'),
+      '#description' => t('Provide your email address for billing purposes.'),
+      '#required' => TRUE,
+    );
+  }
 
   $form['event']['name'] = array(
     '#type' => 'textfield',
@@ -45,47 +74,174 @@ function ig_purchase_event_form() {
     '#description' => t('The hashtag for your event. This will be the name your guests will use to tag their photos.'),
     '#required' => TRUE,
   );
-  /*
-  $form['stripe'] = array(
-    '#type' => 'stripe_payment',
-    '#address' => FALSE,
-    '#title' => t('Payment Details'),
-    '#prefix' => '<div id="stripe-wrapper">',
-    '#suffix' => '</div>',
+
+  $form['credit_card'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Credit Card Information'),
   );
-  */
-  
+
+  $form['credit_card']['card_number'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Credit Card Number'),
+    '#pre_render' => array('stripeform_remove_name'),
+    '#required' => TRUE,
+    '#attributes' => array(
+      'size' => 20,
+      'data-stripe' => 'number',
+    ),
+  );
+
+  $form['credit_card']['exp_month'] = array(
+    '#type' => 'select',
+    '#title' => t('Expiration Month'),
+    '#options' => drupal_map_assoc(array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)),
+    '#pre_render' => array('stripeform_remove_name'),
+    '#required' => TRUE,
+    '#attributes' => array(
+      'data-stripe' => 'exp-month',
+    ),
+    '#empty_option' => t('- Select -'),
+  );
+
+  $form['credit_card']['exp_year'] = array(
+    '#type' => 'select',
+    '#title' => t('Expiration Year'),
+    '#options' => array(),
+    '#pre_render' => array('stripeform_remove_name'),
+    '#required' => TRUE,
+    '#attributes' => array(
+      'data-stripe' => 'exp-year',
+    ),
+    '#empty_option' => t('- Select -'),
+  );
+
+  $year = date('Y');
+  for ($i = $year; $i <= ($year + 10); $i++) {
+    $form['credit_card']['exp_year']['#options'][$i] = $i;
+  }
+
+  $form['credit_card']['cvc'] = array(
+    '#type' => 'textfield',
+    '#title' => t('CVC Number'),
+    '#pre_render' => array('stripeform_remove_name'),
+    '#attributes' => array(
+      'size' => 4,
+      'data-stripe' => 'cvc',
+    ),
+  );
+
+  // Adds our validation at the end of the build process.
+  $form['#after_build'][] = 'ig_purchase_event_final_validation';
+
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Submit'),
   );
-
-  $form['stripeToken'] = array(
-    '#type' => 'hidden',
-  );
-
-  $form['stripeEmail'] = array(
-    '#type' => 'hidden',
-  );
-
-  $form['stripe'] = array(
-    '#markup' => '<script
-        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-        data-key="pk_test_StxrzT9oHnHbGWxEPjDTanjF"
-        data-image="/img/documentation/checkout/marketplace.png"
-        data-name="Ig-Test"
-        data-label="Pay and Submit"
-        data-description="Instagram live event feed"
-        data-currency="usd"
-        data-amount="3999"
-        data-allow-remember-me=false
-        data-email="' . $mail . '"
-      >
-    </script>',
-  );
   return $form;
 }
 
+/**
+ * After build function for ig_purchase_event form.
+ */
+function ig_purchase_event_final_validation($form) {
+  $form['#validate'][] = 'ig_purchase_event_validate_form_payment';
+  return $form;
+}
+
+/**
+ * Custom validation function to perform CC processing for stripe token.
+ */
+function ig_purchase_event_validate_form_payment($form, $form_state) {
+
+  if ($errors = form_get_errors()) {
+    return;
+  }
+
+  if (($library = libraries_load('stripe')) && !empty($library['loaded'])) {
+
+    $token = $form_state['values']['stripeToken'];
+    $amount = 3999;
+
+    // Create the charge on Stripe's servers - this will charge the user's card.
+    try {
+      $charge = \Stripe\Charge::create(array(
+        "amount" => $amount,
+        "currency" => "usd",
+        "card" => $token,
+        "description" => 'test charge',
+      ));
+
+      $form_state['stripeform_charge'] = $charge;
+    }
+    catch(\Stripe\Error\Card $e) {
+
+      $body = $e->getJsonBody();
+      $err  = $body['error'];
+
+      switch ($err['code']) {
+        case 'incorrect_cvc':
+          $error_field = 'cvc';
+          break;
+
+        default:
+          $error_field = 'form';
+      }
+      watchdog('stripe', $e->getMessage());
+      form_set_error($error_field, $e->getMessage());
+    }
+    catch(\Stripe\Error\InvalidRequest $e) {
+      form_set_error('form', t('Something is wrong with your Credit Card information. Please check all the fields and try again.'));
+    }
+  }
+}
+
+/**
+ * Validation handler for ig_purchase_event form.
+ */
+function ig_purchase_event_validate($form, $form_state) {
+}
+
+/**
+ * The ig_purchase_event form submit handler.
+ */
 function ig_purchase_event_form_submit($form, $form_state) {
-  $test = 'hello';
+  global $user;
+
+  // @todo - register a user if anon and email is not taken.
+
+  // Create event content.
+  $values = array(
+    'type' => 'event',
+    'uid' => $user->uid,
+    'status' => 1,
+    'comment' => 0,
+    'promote' => 0,
+  );
+  $entity = entity_create('node', $values);
+  $ewrapper = entity_metadata_wrapper('node', $entity);
+  $ewrapper->title->set($form_state['values']['name']);
+  $ewrapper->field_event_hashtag->set($form_state['values']['hashtag']);
+  $ewrapper->field_event_payment->set($form_state['values']['stripeToken']);
+  $ewrapper->save();
+
+  drupal_set_message('Your event has been successfully created');
+  drupal_goto('node/' . $ewrapper->getIdentifier());
+}
+
+/**
+ * Implements hook_library().
+ */
+function ig_purchase_event_library() {
+  $module_path = drupal_get_path('module', 'ig_purchase_event');
+
+  $items['stripe'] = array(
+    'title' => t('Stripe'),
+    'version' => '2.0',
+    'js' => array(
+      'https://js.stripe.com/v2/' => array(),
+      $module_path . '/ig_purchase_event.js' => array(),
+    ),
+  );
+
+  return $items;
 }
