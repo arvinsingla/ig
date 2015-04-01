@@ -54,6 +54,11 @@ projects[simple_field_formatter][version] = "2.0-beta3"
 projects[simple_field_formatter][type] = "module"
 projects[simple_field_formatter][subdir] = "contrib"
 
+projects[stripe][subdir] = "contrib"
+projects[stripe][download][type] = "git"
+projects[stripe][download][url] = "https://github.com/arvinsingla/stripe.git"
+projects[stripe][download][branch] = "arvin"
+
 projects[strongarm][version] = "2.0"
 projects[strongarm][type] = "module"
 projects[strongarm][subdir] = "contrib"
@@ -65,5 +70,10 @@ projects[views][subdir] = "contrib"
 projects[views_datasource][version] = "1.0-alpha2"
 projects[views_datasource][type] = "module"
 projects[views_datasource][subdir] = "contrib"
+
+; Libraries
+
+libraries[stripe][download][type] = "file"
+libraries[stripe][download][url] = "https://github.com/stripe/stripe-php/archive/v2.1.1.zip"
 
 ; Themes
