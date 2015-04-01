@@ -1,0 +1,9 @@
+name = Instragram Purchase event
+description = Purchase an Istagram event
+core = 7.x
+package = Instagram
+version = 7.x-1.0
+project = ig_item_feature
+dependencies[] = ig_event_feature
+dependencies[] = stripe
+dependencies[] = instagram

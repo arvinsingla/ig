@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * @file
+ * Instragram purchase event module.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function ig_purchase_event_menu() {
+  $items['create'] = array(
+    'title' => t('Create Instagram Event'),
+    'description' => 'Configuration, and testing',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ig_purchase_event_form'),
+    'access callback' => TRUE,
+  );
+  return $items;
+}
+
+function ig_purchase_event_form() {
+  global $user;
+  $mail = '';
+  if (!empty($user->mail)) {
+    $mail = $user->mail;
+  }
+
+  $form['event'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Event Details'),
+    '#tree' => TRUE,
+  );
+  $form['event'] += element_info('fieldset');
+
+  $form['event']['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Event Name'),
+    '#description' => t('A brief title for your event'),
+    '#required' => TRUE,
+  );
+  $form['event']['hashtag'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Hashtag'),
+    '#description' => t('The hashtag for your event. This will be the name your guests will use to tag their photos.'),
+    '#required' => TRUE,
+  );
+  /*
+  $form['stripe'] = array(
+    '#type' => 'stripe_payment',
+    '#address' => FALSE,
+    '#title' => t('Payment Details'),
+    '#prefix' => '<div id="stripe-wrapper">',
+    '#suffix' => '</div>',
+  );
+  */
+  
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+
+  $form['stripeToken'] = array(
+    '#type' => 'hidden',
+  );
+
+  $form['stripeEmail'] = array(
+    '#type' => 'hidden',
+  );
+
+  $form['stripe'] = array(
+    '#markup' => '<script
+        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="pk_test_StxrzT9oHnHbGWxEPjDTanjF"
+        data-image="/img/documentation/checkout/marketplace.png"
+        data-name="Ig-Test"
+        data-label="Pay and Submit"
+        data-description="Instagram live event feed"
+        data-currency="usd"
+        data-amount="3999"
+        data-allow-remember-me=false
+        data-email="' . $mail . '"
+      >
+    </script>',
+  );
+  return $form;
+}
+
+function ig_purchase_event_form_submit($form, $form_state) {
+  $test = 'hello';
+}
