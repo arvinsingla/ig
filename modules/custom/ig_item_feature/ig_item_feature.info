@@ -6,6 +6,7 @@ version = 7.x-1.0
 project = ig_item_feature
 dependencies[] = entityreference
 dependencies[] = features
+dependencies[] = ig_base_feature
 dependencies[] = instagram
 dependencies[] = strongarm
 dependencies[] = text

@@ -46,6 +46,10 @@ projects[maillog][version] = "1.0-alpha1"
 projects[maillog][type] = "module"
 projects[maillog][subdir] = "contrib"
 
+projects[node_view_permissions][version] = "1.5"
+projects[node_view_permissions][type] = "module"
+projects[node_view_permissions][subdir] = "contrib"
+
 projects[rules][version] = "2.7"
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"

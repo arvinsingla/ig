@@ -57,7 +57,7 @@ function ig_purchase_event_form($form, &$form_state) {
     $form['event']['email'] = array(
       '#type' => 'textfield',
       '#title' => t('Email'),
-      '#description' => t('Provide your email address for billing purposes.'),
+      '#description' => t('A valid email address. This will be used to create your account and for billing purposes.'),
       '#required' => TRUE,
     );
   }
@@ -65,19 +65,20 @@ function ig_purchase_event_form($form, &$form_state) {
   $form['event']['name'] = array(
     '#type' => 'textfield',
     '#title' => t('Event Name'),
-    '#description' => t('A brief title for your event'),
+    '#description' => t('A brief title for your event.'),
     '#required' => TRUE,
   );
   $form['event']['hashtag'] = array(
     '#type' => 'textfield',
-    '#title' => t('Hashtag'),
-    '#description' => t('The hashtag for your event. This will be the name your guests will use to tag their photos.'),
+    '#title' => t('Event Hashtag'),
+    '#description' => t('This will be the hashtag your guests use to tag their posts. A hashtags can include  only letters and numbers without spaces.'),
     '#required' => TRUE,
   );
 
   $form['credit_card'] = array(
     '#type' => 'fieldset',
     '#title' => t('Credit Card Information'),
+    '#tree' => FALSE,
   );
 
   $form['credit_card']['card_number'] = array(
@@ -131,7 +132,7 @@ function ig_purchase_event_form($form, &$form_state) {
   );
 
   // Adds our validation at the end of the build process.
-  $form['#after_build'][] = 'ig_purchase_event_final_validation';
+  $form['#after_build'][] = 'ig_purchase_event_validation';
 
   $form['submit'] = array(
     '#type' => 'submit',
@@ -143,9 +144,45 @@ function ig_purchase_event_form($form, &$form_state) {
 /**
  * After build function for ig_purchase_event form.
  */
-function ig_purchase_event_final_validation($form) {
+function ig_purchase_event_validation($form) {
+  $form['#validate'][] = 'ig_purchase_event_validate';
   $form['#validate'][] = 'ig_purchase_event_validate_form_payment';
   return $form;
+}
+
+/**
+ * Validation handler for ig_purchase_event form.
+ */
+function ig_purchase_event_validate($form, $form_state) {
+
+  // Validate email address.
+  if (!valid_email_address($form_state['values']['email'])) {
+    form_set_error('email', t('You must enter a valid email address.'));
+  }
+
+  // Validate event name.
+  $name_length = strlen(trim($form_state['values']['name']));
+  if ($name_length > 255) {
+    form_set_error('name', t('Event name is too long. Shorten it up a bit please.'));
+  }
+  else if ($name_length < 3) {
+    form_set_error('name', t('Event name is too short. Make it a little longer please.'));
+  }
+
+    // Validate hashtag.
+  if (!preg_match('/^#?[A-Za-z0-9]+$/u', $form_state['values']['hashtag'])) {
+    form_set_error('hashtag', t('You must enter a valid hashtag.'));
+  }
+
+  // Validate Credit card number.
+  if (!ctype_digit($form_state['values']['card_number'])) {
+    form_set_error('card_number', t('Credit card number must be a valid number without spaces.'));
+  }
+  
+  // Validate CVC.
+  if (strlen($form_state['values']['cvc']) && !ctype_digit($form_state['values']['cvc'])) {
+    form_set_error('cvc', t('CVC must be a valid number.'));
+  }
 }
 
 /**
@@ -196,18 +233,24 @@ function ig_purchase_event_validate_form_payment($form, $form_state) {
 }
 
 /**
- * Validation handler for ig_purchase_event form.
- */
-function ig_purchase_event_validate($form, $form_state) {
-}
-
-/**
  * The ig_purchase_event form submit handler.
  */
 function ig_purchase_event_form_submit($form, $form_state) {
   global $user;
+  $uid = $user->uid;
+  $email = $form_state['values']['email'];
 
-  // @todo - register a user if anon and email is not taken.
+  // Validate if an user exists or if we should create one.
+  if (empty($uid)) {
+    $uid_from_email = db_select('users')
+      ->fields('users', array('uid'))
+      ->condition('mail', db_like($form_state['values']['email']), 'LIKE')
+      ->range(0, 1)
+      ->execute()
+      ->fetchField();
+    
+    $uid = empty($uid_from_email) ? ig_purchase_event_create_and_login_user($email) : $uid_from_email;
+  }
 
   // Create event content.
   $values = array(
@@ -219,13 +262,44 @@ function ig_purchase_event_form_submit($form, $form_state) {
   );
   $entity = entity_create('node', $values);
   $ewrapper = entity_metadata_wrapper('node', $entity);
-  $ewrapper->title->set($form_state['values']['name']);
-  $ewrapper->field_event_hashtag->set($form_state['values']['hashtag']);
+  $ewrapper->title->set(check_plain($form_state['values']['name']));
+  $ewrapper->field_event_hashtag->set(str_replace('#', '', $form_state['values']['hashtag']));
   $ewrapper->field_event_payment->set($form_state['values']['stripeToken']);
   $ewrapper->save();
 
   drupal_set_message('Your event has been successfully created');
   drupal_goto('node/' . $ewrapper->getIdentifier());
+}
+
+function ig_purchase_event_create_and_login_user($email) {
+  // Randomly generate password.
+  $password = user_password(8);
+ 
+  // Set up the user fields.
+  $fields = array(
+    'name' => $email,
+    'mail' => $email,
+    'pass' => $password,
+    'status' => 1,
+    'init' => 'email address',
+    'roles' => array(
+      DRUPAL_AUTHENTICATED_RID => 'authenticated user',
+    ),
+  );
+ 
+  // The first parameter is left blank so a new user is created
+  $account = user_save('', $fields);
+
+  // Manually set the password so it appears in the e-mail.
+  $account->password = $fields['pass'];
+ 
+  // Send the e-mail through the user module.
+  drupal_mail('user', 'register_no_approval_required', $email, NULL, array('account' => $account), variable_get('site_mail'));
+
+  $account = array('uid' => $account->uid);
+  user_login_submit(array(), $account);
+  
+  return $account['uid'];
 }
 
 /**
