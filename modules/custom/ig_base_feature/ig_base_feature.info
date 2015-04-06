@@ -21,3 +21,6 @@ features[user_permission][] = view own unpublished content
 features[variable][] = node_options_page
 features[variable][] = node_preview_page
 features[variable][] = node_submitted_page
+features[variable][] = user_cancel_method
+features[variable][] = user_email_verification
+features[variable][] = user_register

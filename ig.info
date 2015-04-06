@@ -20,6 +20,7 @@ dependencies[] = ig_item_feature
 dependencies[] = ig_purchase_event
 dependencies[] = instagram
 dependencies[] = list
+dependencies[] = menu
 dependencies[] = node
 dependencies[] = number
 dependencies[] = options

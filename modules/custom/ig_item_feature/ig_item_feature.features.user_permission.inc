@@ -13,7 +13,9 @@ function ig_item_feature_user_default_permissions() {
   // Exported permission: 'view any ig content'.
   $permissions['view any ig content'] = array(
     'name' => 'view any ig content',
-    'roles' => array(),
+    'roles' => array(
+      'authenticated user' => 'authenticated user',
+    ),
     'module' => 'node_view_permissions',
   );
 

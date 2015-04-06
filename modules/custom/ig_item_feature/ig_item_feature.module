@@ -17,13 +17,14 @@ function ig_item_feature_instagram_process_new($media, $event) {
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'event')
-    ->propertyCondition('status', NODE_PUBLISHED)
-    // @todo only act on active events
+    ->fieldCondition('field_event_fetch', 'value', 1, '=')
     ->fieldCondition('field_event_id', 'value', $event['subscription_id'], '=');
+    // @todo introduce time based filtering.
   $result = $query->execute();
 
   if (!empty($result['node'])) {
-    $ids = array_keys($result['node']);
+    $nids = array_keys($result['node']);
+    $nodes = node_load_multiple($nids);
     // Iterate on media items and create nodes.
     foreach ($media as $item) {
       $values = array(

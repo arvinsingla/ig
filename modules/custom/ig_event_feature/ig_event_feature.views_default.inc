@@ -23,8 +23,7 @@ function ig_event_feature_views_default_views() {
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'perm';
-  $handler->display->display_options['access']['perm'] = 'view own event content';
+  $handler->display->display_options['access']['type'] = 'none';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
@@ -174,6 +173,25 @@ function ig_event_feature_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
+  /* Field: Content: Item */
+  $handler->display->display_options['fields']['field_ig_item']['id'] = 'field_ig_item';
+  $handler->display->display_options['fields']['field_ig_item']['table'] = 'field_data_field_ig_item';
+  $handler->display->display_options['fields']['field_ig_item']['field'] = 'field_ig_item';
+  $handler->display->display_options['fields']['field_ig_item']['label'] = '';
+  $handler->display->display_options['fields']['field_ig_item']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_ig_item']['settings'] = array(
+    'custom_link_to_entity' => 0,
+    'custom_prefix' => '<img width="50" height="50" src="',
+    'custom_suffix' => '" />',
+    'custom_reverse' => 0,
+    'custom_trim' => 0,
+    'custom_strtolower' => 0,
+    'custom_strtoupper' => 0,
+    'custom_ucfirst' => 0,
+    'custom_ucwords' => 0,
+    'custom_strip_tags' => 0,
+    'custom_strip_preserve' => '',
+  );
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
@@ -188,13 +206,10 @@ function ig_event_feature_views_default_views() {
   $handler->display->display_options['arguments']['field_ig_event_target_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['field_ig_event_target_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['field_ig_event_target_id']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['field_ig_event_target_id']['specify_validation'] = TRUE;
   $handler->display->display_options['arguments']['field_ig_event_target_id']['validate']['type'] = 'node';
   $handler->display->display_options['arguments']['field_ig_event_target_id']['validate_options']['types'] = array(
     'event' => 'event',
   );
-  $handler->display->display_options['arguments']['field_ig_event_target_id']['validate_options']['access'] = TRUE;
-  $handler->display->display_options['arguments']['field_ig_event_target_id']['validate_options']['access_op'] = 'update';
   $handler->display->display_options['arguments']['field_ig_event_target_id']['validate']['fail'] = 'access denied';
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';

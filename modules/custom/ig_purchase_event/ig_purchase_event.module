@@ -54,6 +54,10 @@ function ig_purchase_event_form($form, &$form_state) {
   $form['event'] += element_info('fieldset');
 
   if ($user->uid === 0) {
+    $login_link = l(t('Have an account? Login to purchase!'), 'user/login', array('query' => array('destination' => 'create')));
+    $form['event']['login_link'] = array(
+      '#markup' => $login_link,
+    );
     $form['event']['email'] = array(
       '#type' => 'textfield',
       '#title' => t('Email'),
@@ -240,7 +244,7 @@ function ig_purchase_event_form_submit($form, $form_state) {
   $uid = $user->uid;
   $email = $form_state['values']['email'];
 
-  // Validate if an user exists or if we should create one.
+  // Validate if a user exists or if we should create one.
   if (empty($uid)) {
     $uid_from_email = db_select('users')
       ->fields('users', array('uid'))
@@ -255,7 +259,7 @@ function ig_purchase_event_form_submit($form, $form_state) {
   // Create event content.
   $values = array(
     'type' => 'event',
-    'uid' => $user->uid,
+    'uid' => $uid,
     'status' => 0,
     'comment' => 0,
     'promote' => 0,
@@ -268,7 +272,14 @@ function ig_purchase_event_form_submit($form, $form_state) {
   $ewrapper->save();
 
   drupal_set_message('Your event has been successfully created');
-  drupal_goto('node/' . $ewrapper->getIdentifier());
+  $redirect_path = 'node/' . $ewrapper->getIdentifier();
+  if ($user->uid) {
+    drupal_goto($redirect_path);
+  }
+  else {
+    drupal_set_message('Please login to your existing account to manage your event');
+    drupal_goto('user/login', array('query' => array('destination' => $redirect_path)));
+  }
 }
 
 function ig_purchase_event_create_and_login_user($email) {
@@ -294,8 +305,9 @@ function ig_purchase_event_create_and_login_user($email) {
   $account->password = $fields['pass'];
  
   // Send the e-mail through the user module.
-  drupal_mail('user', 'register_no_approval_required', $email, NULL, array('account' => $account), variable_get('site_mail'));
-
+  //drupal_mail('user', 'register_no_approval_required', $email, NULL, array('account' => $account), variable_get('site_mail'));
+  _user_mail_notify('register_no_approval_required', $account);
+  
   $account = array('uid' => $account->uid);
   user_login_submit(array(), $account);
   
