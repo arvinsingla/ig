@@ -17,6 +17,7 @@ features[field_instance][] = node-page-body
 features[filter][] = plain_text
 features[node][] = page
 features[user_permission][] = access content
+features[user_permission][] = view own unpublished content
 features[variable][] = node_options_page
 features[variable][] = node_preview_page
 features[variable][] = node_submitted_page
