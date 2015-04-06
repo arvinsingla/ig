@@ -7,24 +7,185 @@
 include_once 'ig_event_feature.features.inc';
 
 /**
- * Implements hook_form_FORMID_alter().
+ * Implements hook_menu().
  */
-function ig_event_feature_form_event_node_form_alter(&$form, &$form_state, $form_id) {
-  $form['#validate'][] = 'ig_event_feature_initialize_subscription';
+function ig_event_feature_menu() {
+ $items['node/%node/live'] = array(
+    'page callback' => 'ig_event_live_page',
+    'page arguments' => array(1),
+    'access callback' => 'ig_event_live_page_access',
+    'access arguments' => array(1),
+    'type' => MENU_NORMAL_ITEM,
+  );
+ $items['node/%node/manage'] = array(
+    'title' => 'Manage',
+    'page callback' => 'ig_event_manage_page',
+    'page arguments' => array(1),
+    'access callback' => 'ig_event_manage_page_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
+ return $items;
 }
 
 /**
- * Custom validation function to perform subscription to Instagram API service.
+ * Custom page callback for the ig live event page.
  */
-function ig_event_feature_initialize_subscription($form, &$form_state) {
-  // @todo perform hashtag validation.
-  $instagram_api = instagram_get_api();
-  $event = $instagram_api->subscribe($form_state['values']['field_event_hashtag'][LANGUAGE_NONE][0]['value'], 'tag');
-  // Assign the Instagram subscription id to our node.
-  if ($event) {
-    $form_state['values']['field_event_id'][LANGUAGE_NONE][0]['value'] = $event['id'];
+function ig_event_live_page($node) {
+  $node_wrapper = entity_metadata_wrapper('node', $node);
+  return $node_wrapper->label();
+}
+
+/**
+ * Custom access callback for the ig live event page.
+ */
+function ig_event_live_page_access($node) {
+  if ($node->type === 'event') {
+    return $node->status;
+  }
+  return FALSE;
+}
+
+/**
+ * Custom page callback for the ig management page.
+ */
+function ig_event_manage_page($node) {
+  return views_embed_view('manage_event', 'default', $node->nid);
+}
+
+/**
+ * Custom access callback for the ig management page.
+ */
+function ig_event_manage_page_access($node) {
+  global $user;
+  if ($node->type === 'event' && $node->uid == $user->uid) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function ig_event_feature_field_formatter_info() {
+  return array(
+    'ig_event_field_live_formatter' => array(
+      'label' => t('Ig live event'),
+      'field types' => array('list_boolean'),
+    ),
+    'ig_event_field_fetch_formatter' => array(
+      'label' => t('Ig fetch event'),
+      'field types' => array('list_boolean'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function ig_event_feature_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $settings = $display['settings'];
+  $element = array();
+
+  switch($display['type']) {
+    case 'ig_event_field_live_formatter':
+      if (empty($items)) {
+        $element[0] = drupal_get_form('ig_event_feature_publish_form', $entity);
+      }
+      else {
+        foreach ($items as $delta => $item) {
+          $markup = l(t('View live event'), 'node/' . $entity->nid . '/live');
+          $element[$delta] = $item['value'] ? array('#markup' => $markup) : drupal_get_form('ig_event_feature_publish_form', $entity);
+        }
+      }
+      break;
+
+    case 'ig_event_field_fetch_formatter':
+      if (empty($items)) {
+        $element[0] = drupal_get_form('ig_event_feature_publish_form', $entity);
+      }
+      else {
+        foreach ($items as $delta => $item) {
+          $element[$delta] = $item['value'] ? array('#markup' => t('Collecting active data')) : drupal_get_form('ig_event_feature_fetch_form', $entity);
+        }
+      }
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Custom form for publishing an event live.
+ */
+function ig_event_feature_publish_form($form, &$form_state, $node) {
+  $node_wrapper = entity_metadata_wrapper('node', $node);
+  $form['nid'] = array(
+    '#type' => 'hidden',
+    '#value' => $node->nid,
+  );
+  $form['publish_event'] = array(
+    '#type' => 'submit',
+    '#value' => t('Publish event live'),
+    '#disabled' => !$node_wrapper->field_event_fetch->value(),
+  );
+  return $form;
+}
+
+/**
+ * Custom form callback for ig_event_feature_publish_form.
+ */
+function ig_event_feature_publish_form_submit($form, &$form_state) {
+  if (!empty($form_state['values']['nid'])) {
+    $node = node_load($form_state['values']['nid']);
+    $node_wrapper = entity_metadata_wrapper('node', $node);
+    $node_wrapper->field_event_live->set(1);
+    $node_wrapper->status->set(1);
+    $node_wrapper->save();
+    drupal_set_message('Your event is now live');
   }
   else {
-    form_set_error(NULL, t('There was an error processing your request. Please try again later'));
+    drupal_set_message("We were unable to set your event live.");
+  }
+}
+
+/**
+ * Custom form for publishing an event live.
+ */
+function ig_event_feature_fetch_form($form, &$form_state, $node) {
+  $form['nid'] = array(
+    '#type' => 'hidden',
+    '#value' => $node->nid,
+  );
+  $form['fetch_event'] = array(
+    '#type' => 'submit',
+    '#value' => t('Start fetching data'),
+  );
+  return $form;
+}
+
+/**
+ * Custom form callback for ig_event_feature_publish_form.
+ */
+function ig_event_feature_fetch_form_submit($form, &$form_state) {
+  if (!empty($form_state['values']['nid'])) {
+    $node = node_load($form_state['values']['nid']);
+    $node_wrapper = entity_metadata_wrapper('node', $node);
+    $instagram_api = instagram_get_api();
+    $hashtag = $node_wrapper->field_event_hashtag->value();
+    $event = $instagram_api->subscribe($hashtag, 'tag');
+    // Assign the Instagram subscription id to our node.
+    if ($event) {
+      $node_wrapper->field_event_fetch->set(1);
+      $node_wrapper->field_event_id->set($event['id']);
+      $node_wrapper->save();
+      drupal_set_message('Your event is now live');
+    }
+    else {
+      drupal_set_message('An error occurred while registering your tag with Instagram, please try again.', 'error');
+    }
+  }
+  else {
+    drupal_set_message('We were unable to set your event live.', 'error');
   }
 }

@@ -256,7 +256,7 @@ function ig_purchase_event_form_submit($form, $form_state) {
   $values = array(
     'type' => 'event',
     'uid' => $user->uid,
-    'status' => 1,
+    'status' => 0,
     'comment' => 0,
     'promote' => 0,
   );

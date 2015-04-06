@@ -71,6 +71,10 @@ projects[views][version] = "3.10"
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
 
+projects[views_bulk_operations][version] = "3.2"
+projects[views_bulk_operations][type] = "module"
+projects[views_bulk_operations][subdir] = "contrib"
+
 projects[views_datasource][version] = "1.0-alpha2"
 projects[views_datasource][type] = "module"
 projects[views_datasource][subdir] = "contrib"
