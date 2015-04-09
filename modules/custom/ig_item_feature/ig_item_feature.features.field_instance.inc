@@ -34,7 +34,7 @@ function ig_item_feature_field_default_field_instances() {
           'custom_ucwords' => '',
         ),
         'type' => 'text_default',
-        'weight' => 4,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -55,10 +55,10 @@ function ig_item_feature_field_default_field_instances() {
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'size' => 60,
+        'rows' => 5,
       ),
-      'type' => 'text_textfield',
-      'weight' => 0,
+      'type' => 'text_textarea',
+      'weight' => 2,
     ),
   );
 
@@ -106,11 +106,7 @@ function ig_item_feature_field_default_field_instances() {
     'widget' => array(
       'active' => 1,
       'module' => 'options',
-      'settings' => array(
-        'match_operator' => 'CONTAINS',
-        'path' => '',
-        'size' => 60,
-      ),
+      'settings' => array(),
       'type' => 'options_select',
       'weight' => 1,
     ),

@@ -7,6 +7,16 @@
 include_once 'ig_event_feature.features.inc';
 
 /**
+ * Implements hook_init().
+ */
+function ig_event_feature_init() {
+  global $user;
+  if ($user->uid && drupal_is_front_page()) {
+    drupal_goto('user');
+  }
+}
+
+/**
  * Implements hook_menu().
  */
 function ig_event_feature_menu() {

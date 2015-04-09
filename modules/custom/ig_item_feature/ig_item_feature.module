@@ -24,7 +24,6 @@ function ig_item_feature_instagram_process_new($media, $event) {
 
   if (!empty($result['node'])) {
     $nids = array_keys($result['node']);
-    $nodes = node_load_multiple($nids);
     // Iterate on media items and create nodes.
     foreach ($media as $item) {
       $values = array(
@@ -43,7 +42,7 @@ function ig_item_feature_instagram_process_new($media, $event) {
       $ewrapper->field_ig_username->set($item['user']['user_name']);
       $ewrapper->field_ig_profile->set($item['user']['profile_picture']);
       $ewrapper->field_ig_item->set($item['images']['standard_resolution']['url']);
-      $ewrapper->field_ig_event->set($ids);
+      $ewrapper->field_ig_event->set($nids);
       $ewrapper->save();
     }
   }

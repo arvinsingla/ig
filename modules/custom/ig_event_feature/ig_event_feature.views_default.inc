@@ -178,11 +178,13 @@ function ig_event_feature_views_default_views() {
   $handler->display->display_options['fields']['field_ig_item']['table'] = 'field_data_field_ig_item';
   $handler->display->display_options['fields']['field_ig_item']['field'] = 'field_ig_item';
   $handler->display->display_options['fields']['field_ig_item']['label'] = '';
+  $handler->display->display_options['fields']['field_ig_item']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_ig_item']['alter']['text'] = '<img src="[field_ig_item-value]" width="200" height="200" />';
   $handler->display->display_options['fields']['field_ig_item']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_ig_item']['settings'] = array(
     'custom_link_to_entity' => 0,
-    'custom_prefix' => '<img width="50" height="50" src="',
-    'custom_suffix' => '" />',
+    'custom_prefix' => '',
+    'custom_suffix' => '',
     'custom_reverse' => 0,
     'custom_trim' => 0,
     'custom_strtolower' => 0,

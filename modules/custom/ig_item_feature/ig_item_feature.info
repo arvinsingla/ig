@@ -29,6 +29,7 @@ features[field_instance][] = node-ig-field_ig_username
 features[node][] = ig
 features[user_permission][] = view any ig content
 features[user_permission][] = view own ig content
+features[variable][] = field_bundle_settings_node__ig
 features[variable][] = node_options_ig
 features[variable][] = node_preview_ig
 features[variable][] = node_submitted_ig
