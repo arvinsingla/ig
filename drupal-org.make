@@ -54,10 +54,6 @@ projects[rules][version] = "2.7"
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
 
-projects[simple_field_formatter][version] = "2.0-beta3"
-projects[simple_field_formatter][type] = "module"
-projects[simple_field_formatter][subdir] = "contrib"
-
 projects[stripe][subdir] = "contrib"
 projects[stripe][download][type] = "git"
 projects[stripe][download][url] = "https://github.com/arvinsingla/stripe.git"

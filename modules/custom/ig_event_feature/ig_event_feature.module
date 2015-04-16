@@ -11,8 +11,8 @@ include_once 'ig_event_feature.features.inc';
  */
 function ig_event_feature_init() {
   global $user;
-  if ($user->uid && drupal_is_front_page()) {
-    drupal_goto('user');
+  if (!$user->uid && drupal_is_front_page() && !function_exists('drush_main')) {
+    drupal_goto('create');
   }
 }
 
@@ -20,15 +20,8 @@ function ig_event_feature_init() {
  * Implements hook_menu().
  */
 function ig_event_feature_menu() {
- $items['node/%node/live'] = array(
-    'page callback' => 'ig_event_live_page',
-    'page arguments' => array(1),
-    'access callback' => 'ig_event_live_page_access',
-    'access arguments' => array(1),
-    'type' => MENU_NORMAL_ITEM,
-  );
  $items['node/%node/manage'] = array(
-    'title' => 'Manage',
+    'title' => 'Manage content',
     'page callback' => 'ig_event_manage_page',
     'page arguments' => array(1),
     'access callback' => 'ig_event_manage_page_access',
@@ -39,21 +32,25 @@ function ig_event_feature_menu() {
 }
 
 /**
- * Custom page callback for the ig live event page.
+ * Implements hook_menu_alter().
  */
-function ig_event_live_page($node) {
-  $node_wrapper = entity_metadata_wrapper('node', $node);
-  return $node_wrapper->label();
+function ig_event_feature_menu_alter(&$items) {
+  // Rename tab titles for the user.
+  $items['user/%user/view']['title'] = 'My events';
+  $items['user/%user/edit']['title'] = 'Edit account';
 }
 
 /**
- * Custom access callback for the ig live event page.
+ * Implements hook_user_view().
  */
-function ig_event_live_page_access($node) {
-  if ($node->type === 'event') {
-    return $node->status;
+function ig_event_feature_user_view_alter(&$build) {
+  if ($build['#view_mode'] === 'full') {
+    // Remove the user summary and inject view for events.
+    unset($build['summary']);
+    $build['events'] = array(
+      '#markup' => views_embed_view('events', 'default', $build['#account']->uid),
+    );
   }
-  return FALSE;
 }
 
 /**
@@ -192,7 +189,7 @@ function ig_event_feature_fetch_form_submit($form, &$form_state) {
       $node_wrapper->field_event_fetch->set(1);
       $node_wrapper->field_event_id->set($event['id']);
       $node_wrapper->save();
-      drupal_set_message('Your event is now live');
+      drupal_set_message('Your event is now ready to collect images');
     }
     else {
       drupal_set_message('An error occurred while registering your tag with Instagram, please try again.', 'error');

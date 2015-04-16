@@ -44,6 +44,23 @@ function staples_install() {
   }
   */
 
+  // Create menu items.
+  $item = array(
+    'link_title' => st('Create an event'),
+    'link_path' => '<front>',
+    'menu_name' => 'user-menu',
+  );
+  menu_link_save($item);
+  $item = array(
+    'link_title' => st('Login'),
+    'link_path' => 'user/login',
+    'menu_name' => 'user-menu',
+  );
+  menu_link_save($item);
+
+  // Update the menu router information.
+  menu_rebuild();
+  
   // This is a new option in Features, called "Features lock mode"
   // and by default "Prevent rebuild and revert" is selected. With this
   // we set "Allow rebuild (prevent revert)" to be the default.
