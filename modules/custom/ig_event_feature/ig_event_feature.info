@@ -64,4 +64,5 @@ features[variable][] = node_preview_event
 features[variable][] = node_submitted_event
 features[variable][] = node_view_permissions_event
 features[variable][] = site_frontpage
+features[views_view][] = events
 features[views_view][] = manage_event

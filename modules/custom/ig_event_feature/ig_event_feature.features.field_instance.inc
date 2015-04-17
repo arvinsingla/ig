@@ -20,17 +20,18 @@ function ig_event_feature_field_default_field_instances() {
       'default' => array(
         'label' => 'hidden',
         'module' => 'text',
+        'settings' => array(),
         'type' => 'text_default',
         'weight' => 0,
       ),
       'teaser' => array(
         'label' => 'hidden',
         'module' => 'text',
-        'type' => 'text_summary_or_trimmed',
-        'weight' => 0,
         'settings' => array(
           'trim_length' => 600,
         ),
+        'type' => 'text_summary_or_trimmed',
+        'weight' => 0,
       ),
     ),
     'entity_type' => 'node',
@@ -68,6 +69,7 @@ function ig_event_feature_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'ig_event_feature',
+        'settings' => array(),
         'type' => 'ig_event_field_fetch_formatter',
         'weight' => 4,
       ),
@@ -106,6 +108,7 @@ function ig_event_feature_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'text',
+        'settings' => array(),
         'type' => 'text_default',
         'weight' => 2,
       ),
@@ -148,6 +151,7 @@ function ig_event_feature_field_default_field_instances() {
         'settings' => array(
           'decimal_separator' => '.',
           'prefix_suffix' => FALSE,
+          'scale' => 0,
           'thousand_separator' => ' ',
         ),
         'type' => 'number_integer',
@@ -194,6 +198,7 @@ function ig_event_feature_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'ig_event_feature',
+        'settings' => array(),
         'type' => 'ig_event_field_live_formatter',
         'weight' => 5,
       ),
@@ -232,6 +237,7 @@ function ig_event_feature_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'text',
+        'settings' => array(),
         'type' => 'text_default',
         'weight' => 3,
       ),
