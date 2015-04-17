@@ -20,6 +20,7 @@ function ig_item_feature_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'text',
+        'settings' => array(),
         'type' => 'text_default',
         'weight' => 6,
       ),
@@ -59,6 +60,9 @@ function ig_item_feature_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
         'type' => 'entityreference_label',
         'weight' => 5,
       ),
@@ -95,6 +99,7 @@ function ig_item_feature_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'text',
+        'settings' => array(),
         'type' => 'text_default',
         'weight' => 0,
       ),
@@ -134,6 +139,7 @@ function ig_item_feature_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'text',
+        'settings' => array(),
         'type' => 'text_default',
         'weight' => 2,
       ),
@@ -173,6 +179,7 @@ function ig_item_feature_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'text',
+        'settings' => array(),
         'type' => 'text_default',
         'weight' => 1,
       ),
@@ -212,6 +219,7 @@ function ig_item_feature_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'text',
+        'settings' => array(),
         'type' => 'text_default',
         'weight' => 3,
       ),

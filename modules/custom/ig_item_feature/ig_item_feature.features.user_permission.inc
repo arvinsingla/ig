@@ -14,6 +14,7 @@ function ig_item_feature_user_default_permissions() {
   $permissions['view any ig content'] = array(
     'name' => 'view any ig content',
     'roles' => array(
+      'anonymous user' => 'anonymous user',
       'authenticated user' => 'authenticated user',
     ),
     'module' => 'node_view_permissions',

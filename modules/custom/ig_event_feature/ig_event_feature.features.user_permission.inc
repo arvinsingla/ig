@@ -97,7 +97,9 @@ function ig_event_feature_user_default_permissions() {
   // Exported permission: 'view any event content'.
   $permissions['view any event content'] = array(
     'name' => 'view any event content',
-    'roles' => array(),
+    'roles' => array(
+      'anonymous user' => 'anonymous user',
+    ),
     'module' => 'node_view_permissions',
   );
 
@@ -105,6 +107,16 @@ function ig_event_feature_user_default_permissions() {
   $permissions['view field_event_fetch'] = array(
     'name' => 'view field_event_fetch',
     'roles' => array(),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'view field_event_hashtag'.
+  $permissions['view field_event_hashtag'] = array(
+    'name' => 'view field_event_hashtag',
+    'roles' => array(
+      'anonymous user' => 'anonymous user',
+      'authenticated user' => 'authenticated user',
+    ),
     'module' => 'field_permissions',
   );
 

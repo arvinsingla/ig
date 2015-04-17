@@ -47,3 +47,86 @@ function ig_item_feature_instagram_process_new($media, $event) {
     }
   }
 }
+
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function ig_item_feature_field_formatter_info() {
+  return array(
+    'ig_item_field_event_formatter' => array(
+      'label' => t('Remove event'),
+      'field types' => array('entityreference'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function ig_item_feature_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $settings = $display['settings'];
+  $element = array();
+
+  switch($display['type']) {
+    case 'ig_item_field_event_formatter':
+      foreach ($items as $delta => $item) {
+        $argument = arg(1);
+        $ref = $item['target_id'];
+        if (is_numeric($argument) && $argument === $ref) {
+          $element[$delta] = drupal_get_form('ig_item_feature_remove_event_form_' . $entity->nid, $entity->nid, $ref);
+        }
+      }
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_forms().
+ */
+function ig_item_feature_forms($form_id, $args) {
+  $forms = array();
+  if (strpos($form_id, 'ig_item_feature_remove_event_form_') === 0) {
+    $forms[$form_id] = array(
+      'callback' => 'ig_item_feature_remove_event_form',
+      'callback_arguments' => $args,
+    );
+  }
+  return $forms;
+}
+
+/**
+ * Custom form for publishing an event live.
+ */
+function ig_item_feature_remove_event_form($form, &$form_state, $item_nid, $event_nid) {
+  $form['event_nid'] = array(
+    '#type' => 'hidden',
+    '#value' => $event_nid,
+  );
+  $form['item_nid'] = array(
+    '#type' => 'hidden',
+    '#value' => $item_nid,
+  );
+  $form['remove_event'] = array(
+    '#type' => 'submit',
+    '#value' => t('Remove'),
+  );
+  return $form;
+}
+
+/**
+ * Custom form callback for ig_item_feature_remove_event_form.
+ */
+function ig_item_feature_remove_event_form_submit($form, &$form_state) {
+  $item = node_load($form_state['values']['item_nid']);
+  $item_wrapper = entity_metadata_wrapper('node', $item);
+  foreach($item_wrapper->field_ig_event as $delta => $field)  {
+    if ($field->nid->value() === $form_state['values']['event_nid']) {
+      unset($item_wrapper->field_ig_event[$delta]);
+      $item_wrapper->save();
+      break;
+    }
+  }
+}

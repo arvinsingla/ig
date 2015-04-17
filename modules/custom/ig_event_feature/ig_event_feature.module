@@ -104,7 +104,7 @@ function ig_event_feature_field_formatter_view($entity_type, $entity, $field, $i
       }
       else {
         foreach ($items as $delta => $item) {
-          $markup = l(t('View live event'), 'node/' . $entity->nid . '/live');
+          $markup = l(t('View live event'), 'live/' . $entity->nid);
           $element[$delta] = $item['value'] ? array('#markup' => $markup) : drupal_get_form('ig_event_feature_publish_form', $entity);
         }
       }
