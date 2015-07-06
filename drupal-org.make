@@ -25,7 +25,7 @@ projects[entityreference][version] = "1.1"
 projects[entityreference][type] = "module"
 projects[entityreference][subdir] = "contrib"
 
-projects[features][version] = "2.4"
+projects[features][version] = "2.6"
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
 
@@ -41,6 +41,10 @@ projects[instagram][subdir] = "contrib"
 projects[instagram][download][type] = "git"
 projects[instagram][download][url] = "https://github.com/arvinsingla/instagram-drupal.git"
 projects[instagram][download][branch] = "master"
+
+projects[libraries][version] = "2.2"
+projects[libraries][type] = "module"
+projects[libraries][subdir] = "contrib"
 
 projects[maillog][version] = "1.0-alpha1"
 projects[maillog][type] = "module"
@@ -63,7 +67,7 @@ projects[strongarm][version] = "2.0"
 projects[strongarm][type] = "module"
 projects[strongarm][subdir] = "contrib"
 
-projects[views][version] = "3.10"
+projects[views][version] = "3.11"
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
 

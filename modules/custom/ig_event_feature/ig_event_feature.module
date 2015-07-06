@@ -66,7 +66,7 @@ function ig_event_manage_page($node) {
 function ig_event_manage_page_access($node) {
   global $user;
   if ($user->uid == 1) {
-    return TRUE;  
+    return TRUE;
   }
   if ($node->type === 'event' && $node->uid == $user->uid) {
     return TRUE;
