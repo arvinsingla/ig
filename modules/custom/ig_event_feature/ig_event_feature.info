@@ -8,7 +8,6 @@ dependencies[] = ctools
 dependencies[] = features
 dependencies[] = field_permissions
 dependencies[] = ig_base_feature
-dependencies[] = ig_event_feature
 dependencies[] = instagram
 dependencies[] = list
 dependencies[] = node_view_permissions

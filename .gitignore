@@ -1,3 +1,4 @@
 **/*.bak.*
 modules/contrib/*
 libraries/*
+.idea
