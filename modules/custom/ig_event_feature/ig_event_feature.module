@@ -28,6 +28,14 @@ function ig_event_feature_menu() {
     'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
   );
+  $items['live/%node'] = array(
+    'title' => 'Live event',
+    'page callback' => 'ig_event_live_page',
+    'page arguments' => array(1),
+    'access callback' => 'ig_event_live_page_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
  return $items;
 }
 
@@ -73,6 +81,22 @@ function ig_event_manage_page_access($node) {
   }
   return FALSE;
 }
+
+/**
+ * Custom page callback for the ig management page.
+ */
+function ig_event_live_page($node) {
+  drupal_set_title($node->title);
+  return '';
+}
+
+/**
+ * Custom access callback for the ig event live page.
+ */
+function ig_event_live_page_access($node) {
+  return $node->type === 'event' && $node->status;
+}
+
 
 /**
  * Implements hook_field_formatter_info().
@@ -160,7 +184,7 @@ function ig_event_feature_publish_form_submit($form, &$form_state) {
 }
 
 /**
- * Custom form for publishing an event live.
+ * Custom form for registering event hashtag with instagram.
  */
 function ig_event_feature_fetch_form($form, &$form_state, $node) {
   $form['nid'] = array(
@@ -175,7 +199,7 @@ function ig_event_feature_fetch_form($form, &$form_state, $node) {
 }
 
 /**
- * Custom form callback for ig_event_feature_publish_form.
+ * Custom form callback for ig_event_feature_fetch_form.
  */
 function ig_event_feature_fetch_form_submit($form, &$form_state) {
   if (!empty($form_state['values']['nid'])) {
@@ -196,6 +220,6 @@ function ig_event_feature_fetch_form_submit($form, &$form_state) {
     }
   }
   else {
-    drupal_set_message('We were unable to set your event live.', 'error');
+    drupal_set_message('We were unable to start fetching data.', 'error');
   }
 }

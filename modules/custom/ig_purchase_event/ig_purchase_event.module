@@ -10,7 +10,7 @@
  */
 function ig_purchase_event_menu() {
   $items['create'] = array(
-    'title' => 'Create Instagram Event',
+    'title' => 'Create Event',
     'description' => 'Configuration, and testing',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ig_purchase_event_form'),

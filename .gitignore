@@ -1,4 +1,6 @@
 **/*.bak.*
 modules/contrib/*
+themes/contrib/*
+themes/custom/ig_theme/bootstrap/*
 libraries/*
 .idea

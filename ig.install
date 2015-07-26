@@ -7,7 +7,7 @@
 /**
  * Implements hook_install().
  */
-function staples_install() {
+function ig_install() {
   // Run Environment Switch on install.
   /*
   $environment = variable_get('environment');

@@ -1,6 +1,10 @@
 api = 2
 core = 7.x
 
+projects[context][version] = "3.6"
+projects[context][type] = "module"
+projects[context][subdir] = "contrib"
+
 projects[ctools][version] = "1.7"
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
@@ -42,6 +46,10 @@ projects[instagram][download][type] = "git"
 projects[instagram][download][url] = "https://github.com/arvinsingla/instagram-drupal.git"
 projects[instagram][download][branch] = "master"
 
+projects[jquery_update][version] = "3.0-alpha2"
+projects[jquery_update][type] = "module"
+projects[jquery_update][subdir] = "contrib"
+
 projects[libraries][version] = "2.2"
 projects[libraries][type] = "module"
 projects[libraries][subdir] = "contrib"
@@ -80,4 +88,12 @@ projects[views_datasource][subdir] = "contrib"
 libraries[stripe][download][type] = "file"
 libraries[stripe][download][url] = "https://github.com/stripe/stripe-php/archive/v2.1.1.zip"
 
+libraries[bootstrap][download][type] = "file"
+libraries[bootstrap][download][url] = "https://github.com/twbs/bootstrap/archive/v3.3.5.zip"
+libraries[bootstrap][destination] = "themes/custom/ig_theme"
+
 ; Themes
+
+projects[bootstrap][version] = "3.0"
+projects[bootstrap][type] = "theme"
+projects[bootstrap][subdir] = "contrib"
