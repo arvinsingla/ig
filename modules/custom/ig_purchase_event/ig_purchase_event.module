@@ -54,12 +54,13 @@ function ig_purchase_event_form($form, &$form_state) {
   $form['event'] += element_info('fieldset');
 
   if ($user->uid === 0) {
-    $login_link = l(t('Have an account? Login to purchase!'), 'user/login', array('query' => array('destination' => 'create')));
-    $form['event']['login_link'] = array(
+    $login_link = l(t('Already have an account? Login to purchase!'), 'user/login', array('query' => array('destination' => 'create')));
+    $form['login_link'] = array(
       '#markup' => $login_link,
+      '#weight' => -1,
     );
     $form['event']['email'] = array(
-      '#type' => 'textfield',
+      '#type' => 'emailfield',
       '#title' => t('Email'),
       '#description' => t('A valid email address. This will be used to create your account and for billing purposes.'),
       '#required' => TRUE,
@@ -104,12 +105,15 @@ function ig_purchase_event_form($form, &$form_state) {
     '#attributes' => array(
       'size' => 20,
       'data-stripe' => 'number',
+      // http://stackoverflow.com/questions/25163891/when-scan-credit-card-option-is-available-on-ios8-safari/25925195#25925195
+      'id' => 'cardNumber',
+      'pattern' => '\d*'
     ),
   );
 
   $form['credit_card']['exp_month'] = array(
     '#type' => 'select',
-    '#title' => t('Expiration Month'),
+    '#title' => t('Expiry  Month'),
     '#options' => drupal_map_assoc(array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)),
     '#pre_render' => array('stripeform_remove_name'),
     '#required' => TRUE,
@@ -121,7 +125,7 @@ function ig_purchase_event_form($form, &$form_state) {
 
   $form['credit_card']['exp_year'] = array(
     '#type' => 'select',
-    '#title' => t('Expiration Year'),
+    '#title' => t('Expiry Year'),
     '#options' => array(),
     '#pre_render' => array('stripeform_remove_name'),
     '#required' => TRUE,
@@ -143,6 +147,7 @@ function ig_purchase_event_form($form, &$form_state) {
     '#attributes' => array(
       'size' => 4,
       'data-stripe' => 'cvc',
+      'pattern' => '\d*'
     ),
   );
 

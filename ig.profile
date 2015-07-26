@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Enables modules and site configuration for a staples site installation.
+ * Enables modules and site configuration.
  */
 
 /**
@@ -9,7 +9,7 @@
  *
  * Allows the profile to alter the site configuration form.
  */
-function staples_form_install_configure_form_alter(&$form, $form_state) {
+function ig_form_install_configure_form_alter(&$form, $form_state) {
   // Set initial Regional/Timezone settings.
   $form['regional_settings']['site_default_country']['#default_value'] = 'US';
   // Source: https://www.drupal.org/node/1017020#comment-6897960
@@ -20,7 +20,7 @@ function staples_form_install_configure_form_alter(&$form, $form_state) {
 /**
  * Implements hook_environment().
 
-function staples_environment() {
+function ig_environment() {
   $environments = array();
   $environments['local'] = array(
     'label' => t('Local'),
@@ -46,7 +46,7 @@ function staples_environment() {
 /**
  * Implements hook_environment_switch().
 
-function staples_environment_switch($target_env, $current_env, $workflow = NULL) {
+function ig_environment_switch($target_env, $current_env, $workflow = NULL) {
   // Declare development-related modules.
   $dev_modules = array(
     'stp_dev',

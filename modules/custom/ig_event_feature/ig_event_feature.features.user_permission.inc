@@ -66,6 +66,15 @@ function ig_event_feature_user_default_permissions() {
     'module' => 'field_permissions',
   );
 
+  // Exported permission: 'edit own event content'.
+  $permissions['edit own event content'] = array(
+    'name' => 'edit own event content',
+    'roles' => array(
+      'authenticated user' => 'authenticated user',
+    ),
+    'module' => 'node',
+  );
+
   // Exported permission: 'edit own field_event_fetch'.
   $permissions['edit own field_event_fetch'] = array(
     'name' => 'edit own field_event_fetch',

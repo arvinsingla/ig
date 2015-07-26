@@ -56,24 +56,6 @@ function ig_event_feature_views_default_views() {
   $handler->display->display_options['fields']['title']['label'] = 'Event';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Content: Post date */
-  $handler->display->display_options['fields']['created']['id'] = 'created';
-  $handler->display->display_options['fields']['created']['table'] = 'node';
-  $handler->display->display_options['fields']['created']['field'] = 'created';
-  $handler->display->display_options['fields']['created']['label'] = 'Created';
-  $handler->display->display_options['fields']['created']['date_format'] = 'time ago';
-  $handler->display->display_options['fields']['created']['second_date_format'] = 'long';
-  /* Field: Content: Published */
-  $handler->display->display_options['fields']['status']['id'] = 'status';
-  $handler->display->display_options['fields']['status']['table'] = 'node';
-  $handler->display->display_options['fields']['status']['field'] = 'status';
-  $handler->display->display_options['fields']['status']['label'] = 'Live';
-  $handler->display->display_options['fields']['status']['not'] = 0;
-  /* Field: Content: Fetch */
-  $handler->display->display_options['fields']['field_event_fetch']['id'] = 'field_event_fetch';
-  $handler->display->display_options['fields']['field_event_fetch']['table'] = 'field_data_field_event_fetch';
-  $handler->display->display_options['fields']['field_event_fetch']['field'] = 'field_event_fetch';
-  $handler->display->display_options['fields']['field_event_fetch']['type'] = 'ig_event_field_fetch_formatter';
   /* Field: Content: Live */
   $handler->display->display_options['fields']['field_event_live']['id'] = 'field_event_live';
   $handler->display->display_options['fields']['field_event_live']['table'] = 'field_data_field_event_live';

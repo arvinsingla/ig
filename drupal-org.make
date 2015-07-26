@@ -21,6 +21,10 @@ projects[diff][version] = "3.2"
 projects[diff][type] = "module"
 projects[diff][subdir] = "contrib"
 
+projects[elements][version] = "1.4"
+projects[elements][type] = "module"
+projects[elements][subdir] = "contrib"
+
 projects[entity][version] = "1.6"
 projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"

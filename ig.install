@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Install, update and uninstall functions for the staples installation profile.
+ * Install, update and uninstall functions for the ig installation profile.
  */
 
 /**
@@ -16,24 +16,11 @@ function ig_install() {
   }
   */
 
-  $default_theme = 'seven';
+  $default_theme = 'ig_theme';
   // Make sure that "seven" theme is enabled.
   theme_enable(array($default_theme));
   // Set seven as the theme default.
   variable_set('theme_default', $default_theme);
-
-  
-  // For each theme configure favicon path.
-  /*
-  $theme_names = array('seven', 'bartik');
-  foreach ($theme_names as $name) {
-    $var_name = 'theme_' . $name . '_settings';
-    $settings = variable_get($var_name, array());
-    $settings['favicon_path'] = 'profiles/staples/images/favicon.ico';
-    $settings['default_favicon'] = 0;
-    variable_set($var_name, $settings);
-  }
-  */
 
   // Administrator role setting to allow this role to have full permissions.
   /*
@@ -46,14 +33,26 @@ function ig_install() {
 
   // Create menu items.
   $item = array(
-    'link_title' => st('Create an event'),
-    'link_path' => '<front>',
+    'link_title' => st('My events'),
+    'link_path' => 'user',
+    'menu_name' => 'user-menu',
+  );
+  menu_link_save($item);
+  $item = array(
+    'link_title' => st('Create event'),
+    'link_path' => 'create',
     'menu_name' => 'user-menu',
   );
   menu_link_save($item);
   $item = array(
     'link_title' => st('Login'),
     'link_path' => 'user/login',
+    'menu_name' => 'user-menu',
+  );
+  menu_link_save($item);
+  $item = array(
+    'link_title' => st('Log out'),
+    'link_path' => 'user/logout',
     'menu_name' => 'user-menu',
   );
   menu_link_save($item);

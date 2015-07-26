@@ -9,6 +9,7 @@ dependencies[] = date
 dependencies[] = dblog
 dependencies[] = devel
 dependencies[] = diff
+dependencies[] = elements
 dependencies[] = entity
 dependencies[] = entityreference
 dependencies[] = features

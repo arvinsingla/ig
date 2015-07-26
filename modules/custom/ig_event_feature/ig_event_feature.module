@@ -21,7 +21,7 @@ function ig_event_feature_init() {
  */
 function ig_event_feature_menu() {
  $items['node/%node/manage'] = array(
-    'title' => 'Manage content',
+    'title' => 'Manage',
     'page callback' => 'ig_event_manage_page',
     'page arguments' => array(1),
     'access callback' => 'ig_event_manage_page_access',
@@ -46,6 +46,15 @@ function ig_event_feature_menu_alter(&$items) {
   // Rename tab titles for the user.
   $items['user/%user/view']['title'] = 'My events';
   $items['user/%user/edit']['title'] = 'Edit account';
+  $items['node/%node/edit']['page callback'] = 'ig_event_feature_node_page_edit';
+}
+
+/**
+ * Custom menu callback for node edit pages.
+ */
+function ig_event_feature_node_page_edit($node) {
+  drupal_set_title($node->title);
+  return drupal_get_form($node->type . '_node_form', $node);
 }
 
 /**
@@ -160,7 +169,7 @@ function ig_event_feature_publish_form($form, &$form_state, $node) {
   );
   $form['publish_event'] = array(
     '#type' => 'submit',
-    '#value' => t('Publish event live'),
+    '#value' => t('Publish live'),
     '#disabled' => !$node_wrapper->field_event_fetch->value(),
   );
   return $form;
