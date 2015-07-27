@@ -6993,7 +6993,6 @@ a.tabledrag-handle .handle {
 }
 div.error,
 table tr.error {
-  background-color: #f2dede;
   color: #a94442;
 }
 .control-group.error {
@@ -7332,4 +7331,26 @@ table .checkbox input[type="checkbox"] {
 }
 .navbar-toggle {
   border: none;
+}
+.view-manage-event .row > div {
+  position: relative;
+  height: 150px;
+}
+.view-manage-event .row > div .views-field-field-ig-event {
+  position: absolute;
+  top: 0;
+  right: 15px;
+  z-index: 1;
+}
+.view-manage-event .row > div .views-field-field-ig-item {
+  position: absolute;
+  right: 30px;
+  top: 15px;
+  bottom: 0;
+  width: 120px;
+  height: 120px;
+}
+.view-manage-event .row > div .views-field-field-ig-item img {
+  width: 120px;
+  height: 120px;
 }

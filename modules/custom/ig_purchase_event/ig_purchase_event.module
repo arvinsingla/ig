@@ -267,6 +267,8 @@ function ig_purchase_event_form_submit($form, $form_state) {
   global $user;
   $uid = $user->uid;
   $email = $form_state['values']['email'];
+  $hashtag = str_replace('#', '', $form_state['values']['hashtag']);
+  $event_id = '';
 
   // Validate if a user exists or if we should create one.
   if (empty($uid)) {
@@ -280,6 +282,13 @@ function ig_purchase_event_form_submit($form, $form_state) {
     $uid = empty($uid_from_email) ? ig_purchase_event_create_and_login_user($email) : $uid_from_email;
   }
 
+  // Create Instagram hashtag subscription.
+  $instagram_api = instagram_get_api();
+  $event = $instagram_api->subscribe($hashtag, 'tag');
+  if ($event && $event['id']) {
+    $event_id = $event['id'];
+  }
+
   // Create event content.
   $values = array(
     'type' => 'event',
@@ -291,7 +300,9 @@ function ig_purchase_event_form_submit($form, $form_state) {
   $entity = entity_create('node', $values);
   $ewrapper = entity_metadata_wrapper('node', $entity);
   $ewrapper->title->set(check_plain($form_state['values']['name']));
-  $ewrapper->field_event_hashtag->set(str_replace('#', '', $form_state['values']['hashtag']));
+  $ewrapper->field_event_hashtag->set($hashtag);
+  $ewrapper->field_event_fetch->set($event_id ? 1 : 0);
+  $ewrapper->field_event_id->set($event_id);
   $ewrapper->field_event_payment->set($form_state['values']['stripeToken']);
   $ewrapper->save();
 

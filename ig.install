@@ -33,12 +33,6 @@ function ig_install() {
 
   // Create menu items.
   $item = array(
-    'link_title' => st('My events'),
-    'link_path' => 'user',
-    'menu_name' => 'user-menu',
-  );
-  menu_link_save($item);
-  $item = array(
     'link_title' => st('Create event'),
     'link_path' => 'create',
     'menu_name' => 'user-menu',
@@ -47,12 +41,6 @@ function ig_install() {
   $item = array(
     'link_title' => st('Login'),
     'link_path' => 'user/login',
-    'menu_name' => 'user-menu',
-  );
-  menu_link_save($item);
-  $item = array(
-    'link_title' => st('Log out'),
-    'link_path' => 'user/logout',
     'menu_name' => 'user-menu',
   );
   menu_link_save($item);

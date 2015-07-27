@@ -83,6 +83,13 @@ projects[views][version] = "3.11"
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
 
+projects[views_bootstrap][type] = "module"
+projects[views_bootstrap][subdir] = "contrib"
+projects[views_bootstrap][download][type] = "git"
+projects[views_bootstrap][download][url] = "http://git.drupal.org/project/views_bootstrap.git"
+projects[views_bootstrap][download][revision] = "8025e821a0450a7535cf7257870efe9a37a5713d"
+projects[views_bootstrap][patch][] = "https://www.drupal.org/files/issues/views_bootstrap-thumbails-columns-per-device-size-2203111-54.patch"
+
 projects[views_datasource][version] = "1.0-alpha2"
 projects[views_datasource][type] = "module"
 projects[views_datasource][subdir] = "contrib"
@@ -101,3 +108,4 @@ libraries[bootstrap][destination] = "themes/custom/ig_theme"
 projects[bootstrap][version] = "3.0"
 projects[bootstrap][type] = "theme"
 projects[bootstrap][subdir] = "contrib"
+

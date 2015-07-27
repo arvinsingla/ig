@@ -103,8 +103,19 @@ function ig_event_feature_views_default_views() {
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'none';
   $handler->display->display_options['pager']['options']['offset'] = '0';
-  $handler->display->display_options['style_plugin'] = 'grid';
+  $handler->display->display_options['style_plugin'] = 'views_bootstrap_grid_plugin_style';
+  $handler->display->display_options['style_options']['columns_horizontal'] = '-1';
+  $handler->display->display_options['style_options']['columns_vertical'] = '4';
+  $handler->display->display_options['style_options']['clear_columns'] = 0;
+  $handler->display->display_options['style_options']['columns_xs'] = '6';
+  $handler->display->display_options['style_options']['columns_sm'] = '4';
+  $handler->display->display_options['style_options']['columns_md'] = '3';
+  $handler->display->display_options['style_options']['columns_lg'] = '2';
   $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['inline'] = array(
+    'field_ig_item' => 'field_ig_item',
+    'field_ig_event' => 'field_ig_event',
+  );
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
   $handler->display->display_options['empty']['area']['table'] = 'views';
@@ -112,12 +123,6 @@ function ig_event_feature_views_default_views() {
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
   $handler->display->display_options['empty']['area']['content'] = 'There are currently no images associated with this event.';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['label'] = '';
-  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   /* Field: Content: Item */
   $handler->display->display_options['fields']['field_ig_item']['id'] = 'field_ig_item';
   $handler->display->display_options['fields']['field_ig_item']['table'] = 'field_data_field_ig_item';

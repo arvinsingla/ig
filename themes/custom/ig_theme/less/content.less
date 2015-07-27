@@ -1,1 +1,31 @@
 // Insert your styling here.
+.view-manage-event {
+
+  .row {
+    & > div {
+      position: relative;
+      height: 150px;
+
+      .views-field-field-ig-event {
+        position: absolute;
+        top: 0;
+        right: 15px;
+        z-index: 1;
+      }
+
+      .views-field-field-ig-item {
+        position: absolute;
+        right: 30px;
+        top: 15px;
+        bottom: 0;
+        width: 120px;
+        height: 120px;
+        img {
+          width: 120px;
+          height: 120px;
+        }
+      }
+    }
+  }
+}
+
