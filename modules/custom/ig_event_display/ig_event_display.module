@@ -1,0 +1,106 @@
+<?php
+/**
+ * @file
+ * Instagram event display module file.
+ */
+
+function ig_event_display_menu() {
+  $items['live/%node'] = array(
+    'page callback' => 'ig_event_display_live',
+    'page arguments' => array(1),
+    'access callback' => 'ig_event_display_live_page_access',
+    'access arguments' => array(1),
+  );
+  return $items;
+}
+
+/**
+ * Custom access callback for the ig event live page.
+ */
+function ig_event_display_live_page_access($node) {
+  return $node->type === 'event' && $node->status;
+}
+
+/**
+ * Implements hook_library().
+ */
+function ig_event_display_libraries_info() {
+
+  $libraries['angular'] = array(
+    'name' => 'Angular JS',
+    'vendor url' => 'https://angularjs.org/',
+    'download url' => 'https://angularjs.org/',
+    'version arguments' => array(
+      'file' => 'angular.js', // Could be any file with version info
+      'pattern' => '/v(\d+)/',
+      'lines' => 2,
+    ),
+    'files' => array(
+      'js' => array('angular.js'),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
+ * Page callback for the live event page.
+ */
+function ig_event_display_live($event) {
+  if (($library = libraries_load('angular')) && !empty($library['loaded'])) {
+    _ig_event_display_add_js($event);
+    return theme('event_display', array('event' => $event));
+  }
+  else {
+    return 'Something bad happened';
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ig_event_display_theme() {
+  return array(
+    'event_display' => array(
+      'template' => 'event_display',
+      'variables' => array(
+        'event' => NULL,
+      ),
+    )
+  );
+}
+
+/**
+ * Preprocess function for event_display.tpl.php.
+ */
+function ig_event_display_preprocess_event_display(&$variables) {
+  $variables['extra'] = "Hello World!";
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function ig_event_display_node_view($node, $view_mode, $langcode) {
+  if ($node->type == 'event' && $view_mode == 'full' && ($library = libraries_load('angular')) && !empty($library['loaded'])) {
+    $node->content['#theme'] = 'event_display';
+    $node->content['#event'] = $node;
+    _ig_event_display_add_js($node);
+  }
+}
+
+/**
+ * Helper function for adding js.
+ */
+function _ig_event_display_add_js($event) {
+  $event_wrapper = entity_metadata_wrapper('node', $event);
+  drupal_add_css(drupal_get_path('module', 'ig_event_display') . '/ig_event_display.css');
+  drupal_add_js(drupal_get_path('module', 'ig_event_display') . '/ig_event_display.js');
+  drupal_add_js(array(
+    'igEventDisplay' => array(
+      'title' => $event_wrapper->title->value(),
+      'nid' => $event_wrapper->nid->value(),
+      'hashtag' => $event_wrapper->field_event_hashtag->value()
+    )),
+    'setting'
+  );
+}

@@ -103,6 +103,9 @@ libraries[bootstrap][download][type] = "file"
 libraries[bootstrap][download][url] = "https://github.com/twbs/bootstrap/archive/v3.3.5.zip"
 libraries[bootstrap][destination] = "themes/custom/ig_theme"
 
+libraries[angular][download][type] = "file"
+libraries[angular][download][url] = "http://code.angularjs.org/1.4.3/angular-1.4.3.zip"
+
 ; Themes
 
 projects[bootstrap][version] = "3.0"

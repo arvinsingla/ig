@@ -1,0 +1,8 @@
+name = Instagram event display
+description = Display instagram events using AngularJS
+core = 7.x
+package = Instagram
+
+dependencies[] = libraries
+dependencies[] = ig_event_feature
+dependencies[] = ig_item_feature

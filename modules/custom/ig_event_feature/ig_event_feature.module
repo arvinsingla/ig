@@ -28,14 +28,14 @@ function ig_event_feature_menu() {
     'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
   );
-  $items['live/%node'] = array(
-    'title' => 'Live event',
-    'page callback' => 'ig_event_live_page',
-    'page arguments' => array(1),
-    'access callback' => 'ig_event_live_page_access',
-    'access arguments' => array(1),
-    'type' => MENU_LOCAL_TASK,
-  );
+//  $items['live/%node'] = array(
+//    'title' => 'Live event',
+//    'page callback' => 'ig_event_live_page',
+//    'page arguments' => array(1),
+//    'access callback' => 'ig_event_live_page_access',
+//    'access arguments' => array(1),
+//    'type' => MENU_LOCAL_TASK,
+//  );
  return $items;
 }
 
