@@ -1,0 +1,61 @@
+._event-wrapper {
+  ul {
+    list-style: none;
+    width: 640px;
+    height: 640px;
+    position: relative;
+    overflow: hidden;
+
+    li {
+      list-style: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+  .item {
+    //&.ng-hide-add {
+    //  transition:1s ease all;
+    //
+    //  display:block!important;
+    //  opacity:1;
+    //}
+    //
+    //&.ng-hide-remove {
+    //  transition-delay: 1s;
+    //  transition:1s ease all;
+    //
+    //  display:block!important;
+    //  opacity:1;
+    //}
+    //
+    //&.ng-hide {
+    //  opacity: 0;
+    //}
+    &.ng-enter {
+      transition: 1s ease all;
+      opacity: 0;
+      left: 640px;
+
+      &.ng-enter-active {
+        opacity: 1;
+        left: 0;
+      }
+    }
+
+    &.ng-leave {
+      transition: 1s ease all;
+      opacity: 1;
+      left: 0;
+
+      &.ng-leave-active {
+        opacity: 0;
+        left: -640px;
+      }
+    }
+    img {
+      width: 640px;
+      height: 640px;
+    }
+  }
+}

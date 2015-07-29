@@ -36,7 +36,10 @@ function ig_event_display_libraries_info() {
       'lines' => 2,
     ),
     'files' => array(
-      'js' => array('angular.js'),
+      'js' => array(
+        'angular.js',
+        'angular-animate.js',
+      ),
     ),
   );
 
@@ -92,11 +95,13 @@ function ig_event_display_node_view($node, $view_mode, $langcode) {
  * Helper function for adding js.
  */
 function _ig_event_display_add_js($event) {
+  global $base_url;
   $event_wrapper = entity_metadata_wrapper('node', $event);
-  drupal_add_css(drupal_get_path('module', 'ig_event_display') . '/ig_event_display.css');
-  drupal_add_js(drupal_get_path('module', 'ig_event_display') . '/ig_event_display.js');
+  drupal_add_css(drupal_get_path('module', 'ig_event_display') . '/css/ig_event_display.css');
+  drupal_add_js(drupal_get_path('module', 'ig_event_display') . '/js/ig_event_display.js');
   drupal_add_js(array(
     'igEventDisplay' => array(
+      'url' => $base_url,
       'title' => $event_wrapper->title->value(),
       'nid' => $event_wrapper->nid->value(),
       'hashtag' => $event_wrapper->field_event_hashtag->value()

@@ -1,0 +1,35 @@
+._event-wrapper ul {
+  list-style: none;
+  width: 640px;
+  height: 640px;
+  position: relative;
+  overflow: hidden;
+}
+._event-wrapper ul li {
+  list-style: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+._event-wrapper .item.ng-enter {
+  transition: 1s ease all;
+  opacity: 0;
+  left: 640px;
+}
+._event-wrapper .item.ng-enter.ng-enter-active {
+  opacity: 1;
+  left: 0;
+}
+._event-wrapper .item.ng-leave {
+  transition: 1s ease all;
+  opacity: 1;
+  left: 0;
+}
+._event-wrapper .item.ng-leave.ng-leave-active {
+  opacity: 0;
+  left: -640px;
+}
+._event-wrapper .item img {
+  width: 640px;
+  height: 640px;
+}
