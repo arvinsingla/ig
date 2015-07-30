@@ -11,7 +11,7 @@ angular.module('eventApp', ['ngAnimate'])
         if ($scope.items && $scope.items.length) {
             $scope.currentItemIndex = ($scope.currentItemIndex >= $scope.items.length - 1) ? 0 : ++$scope.currentItemIndex;
         }
-        $timeout(rotate, 5000);
+        $timeout(rotate, 10000);
     };
 
     $scope.title = Drupal.settings.igEventDisplay.title;

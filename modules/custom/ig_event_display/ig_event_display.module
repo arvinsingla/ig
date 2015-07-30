@@ -10,8 +10,13 @@ function ig_event_display_menu() {
     'page arguments' => array(1),
     'access callback' => 'ig_event_display_live_page_access',
     'access arguments' => array(1),
+    'theme callback' => 'ig_event_live_theme',
   );
   return $items;
+}
+
+function ig_event_live_theme() {
+  return 'ig_live_theme';
 }
 
 /**

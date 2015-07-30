@@ -2,7 +2,6 @@ name = Instagram Prototype
 description = Paid application with realtime instagram feeds.
 version = 1.0
 core = 7.x
-dependencies[] = block
 dependencies[] = context
 dependencies[] = ctools
 dependencies[] = date

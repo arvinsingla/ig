@@ -1,35 +1,55 @@
-._event-wrapper ul {
-  list-style: none;
-  width: 640px;
-  height: 640px;
-  position: relative;
-  overflow: hidden;
+html,
+body,
+._event-wrapper,
+.item {
+  height: 100%;
+  width: 100%;
 }
-._event-wrapper ul li {
-  list-style: none;
+body {
+  background-color: black;
+}
+._event-wrapper .item ._photo {
+  height: 100%;
   position: absolute;
-  top: 0;
+  margin: 0 auto;
   left: 0;
+  right: 0;
 }
-._event-wrapper .item.ng-enter {
-  transition: 1s ease all;
-  opacity: 0;
-  left: 640px;
+._event-wrapper .item ._photo.ng-enter {
+  animation: imageAnimation 10s linear infinite 0s;
 }
-._event-wrapper .item.ng-enter.ng-enter-active {
-  opacity: 1;
-  left: 0;
+@keyframes imageAnimation {
+  0% {
+    opacity: 0;
+    animation-timing-function: ease-in;
+  }
+  25% {
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    animation-timing-function: ease-out;
+    transform: scale(1.1);
+  }
 }
-._event-wrapper .item.ng-leave {
-  transition: 1s ease all;
-  opacity: 1;
-  left: 0;
-}
-._event-wrapper .item.ng-leave.ng-leave-active {
-  opacity: 0;
-  left: -640px;
-}
-._event-wrapper .item img {
-  width: 640px;
-  height: 640px;
+@keyframes titleAnimation {
+  0% {
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  17% {
+    opacity: 1;
+  }
+  19% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
 }
