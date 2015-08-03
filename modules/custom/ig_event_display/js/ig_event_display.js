@@ -14,11 +14,10 @@ angular.module('eventApp', ['ngAnimate'])
         $timeout(rotate, 7000);
     };
 
-    $scope.title = Drupal.settings.igEventDisplay.title;
-    $scope.hashtag = Drupal.settings.igEventDisplay.hashtag;
+    $scope.eventSettings = Drupal.settings.igEventDisplay;
     $scope.currentItemIndex = 0;
 
-    $http.get(eventData.url + '/api/event/' + eventData.nid + '/items').
+    $http.get(eventData.url + '/api/event/' + eventData.nid).
         success(function(data) {
             $scope.items = data;
             if (initialFetch) {
