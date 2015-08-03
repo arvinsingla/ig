@@ -1,4 +1,4 @@
 name = Instagram Live Theme
 description = A complete reset theme for the IG live page.
 core = 7.x
-stylesheets[all][] = reset.css
+stylesheets[all][] = css/reset.css
