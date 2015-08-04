@@ -109,7 +109,8 @@ function _ig_event_display_add_js($event) {
       'url' => $base_url,
       'title' => $event_wrapper->title->value(),
       'nid' => $event_wrapper->nid->value(),
-      'hashtag' => $event_wrapper->field_event_hashtag->value()
+      'hashtag' => $event_wrapper->field_event_hashtag->value(),
+      'theme' => $event_wrapper->field_event_theme->value()
     )),
     'setting'
   );

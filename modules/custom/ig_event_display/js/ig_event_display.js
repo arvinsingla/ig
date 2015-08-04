@@ -15,7 +15,7 @@ angular.module('eventApp', ['ngAnimate'])
     };
 
     $scope.eventSettings = Drupal.settings.igEventDisplay;
-    $scope.currentItemIndex = 0;
+    $scope.currentItemIndex = -1;
 
     $http.get(eventData.url + '/api/event/' + eventData.nid).
         success(function(data) {
