@@ -25,20 +25,20 @@ function ig_purchase_event_menu() {
 function ig_purchase_event_form($form, &$form_state) {
   global $user;
 
-  $setting = array();
-  $setting['stripeform'] = array(
-    'pubkey' => variable_get('stripe_test_publishable'),
-    'form_selector' => str_replace('_', '-', __FUNCTION__),
-  );
-
-  $form['#attached'] = array(
-    'js' => array(
-      array('data' => $setting, 'type' => 'setting'),
-    ),
-    'library' => array(
-      array('ig_purchase_event', 'stripe'),
-    ),
-  );
+//  $setting = array();
+//  $setting['stripeform'] = array(
+//    'pubkey' => variable_get('stripe_test_publishable'),
+//    'form_selector' => str_replace('_', '-', __FUNCTION__),
+//  );
+//
+//  $form['#attached'] = array(
+//    'js' => array(
+//      array('data' => $setting, 'type' => 'setting'),
+//    ),
+//    'library' => array(
+//      array('ig_purchase_event', 'stripe'),
+//    ),
+//  );
 
   // Special hidden element for stripe purchasing.
   $form['stripeToken'] = array(
@@ -79,6 +79,8 @@ function ig_purchase_event_form($form, &$form_state) {
     '#description' => t('This will be the hashtag your guests use to tag their posts. A hashtags can include  only letters and numbers without spaces.'),
     '#required' => TRUE,
   );
+
+  /*
 
   $form['credit_card'] = array(
     '#type' => 'fieldset',
@@ -150,23 +152,43 @@ function ig_purchase_event_form($form, &$form_state) {
       'pattern' => '\d*'
     ),
   );
+  */
 
   // Adds our validation at the end of the build process.
-  $form['#after_build'][] = 'ig_purchase_event_validation';
+  $form['#after_build'][] = 'ig_purchase_event_after_build';
+
+
+  $form['stripe'] = array(
+    '#markup' => '
+      <script
+        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="pk_test_StxrzT9oHnHbGWxEPjDTanjF"
+        data-name="asingla.com"
+        data-description="Instagram event"
+        data-amount="3999">
+      </script>
+    ',
+  );
 
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Submit'),
+    '#attributes' => array(
+      'class' => array(
+        'hidden',
+      ),
+    ),
   );
+
   return $form;
 }
 
 /**
  * After build function for ig_purchase_event form.
  */
-function ig_purchase_event_validation($form) {
-  $form['#validate'][] = 'ig_purchase_event_validate';
-  $form['#validate'][] = 'ig_purchase_event_validate_form_payment';
+function ig_purchase_event_after_build($form) {
+//  $form['#validate'][] = 'ig_purchase_event_validate';
+//  $form['#validate'][] = 'ig_purchase_event_validate_form_payment';
   return $form;
 }
 
@@ -201,6 +223,7 @@ function ig_purchase_event_validate($form, &$form_state) {
     form_set_error('hashtag', t('You must enter a valid hashtag.'));
   }
 
+  /*
   // Validate Credit card number.
   if (!ctype_digit($form_state['values']['card_number'])) {
     form_set_error('card_number', t('Credit card number must be a valid number without spaces.'));
@@ -210,6 +233,7 @@ function ig_purchase_event_validate($form, &$form_state) {
   if (strlen($form_state['values']['cvc']) && !ctype_digit($form_state['values']['cvc'])) {
     form_set_error('cvc', t('CVC must be a valid number.'));
   }
+  */
 }
 
 /**
@@ -302,7 +326,9 @@ function ig_purchase_event_form_submit($form, $form_state) {
   $ewrapper->title->set(check_plain($form_state['values']['name']));
   $ewrapper->field_event_hashtag->set($hashtag);
   $ewrapper->field_event_fetch->set($event_id ? 1 : 0);
-  $ewrapper->field_event_id->set($event_id);
+  if ($event_id) {
+    $ewrapper->field_event_id->set($event_id);
+  }
   $ewrapper->field_event_payment->set($form_state['values']['stripeToken']);
   $ewrapper->save();
 

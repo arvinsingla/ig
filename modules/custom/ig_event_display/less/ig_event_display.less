@@ -150,92 +150,92 @@ body {
 
 // Double theme
 
-._event-wrapper.-double {
-
-  ._header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 30px;
-    box-sizing: border-box;
-    z-index: 2;
-    font-size: 2.5em;
-  }
-
-  ._title,
-  ._hashtag {
-    text-shadow: 0px 0px 15px rgba(0, 0, 0, 1);
-  }
-
-  ._photos {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: nowrap;
-
-    ._photo-wrapper {
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      width: 640px;
-      height: 684px;
-
-      ._photo-container {
-        position: absolute;
-        top: 0;
-        left: 0;
-        transition: 1.5s cubic-bezier(0, 0, 0.1, 1) all;
-        opacity: 1;
-        width: 640px;
-        transform: translateZ(0);
-
-        &.ng-hide {
-          opacity: 0;
-        }
-
-        ._photo {
-          border-radius: 10px;
-          width: 640px;
-        }
-
-        ._photo-details {
-          display: flex;
-          align-items: center;
-          padding: 10px 20px;
-          position: relative;
-          top: -90px;
-          margin-bottom: -90px;
-          background-color: rgba(0, 0, 0, 0.5);
-
-          ._avatar {
-            height: 60px;
-            width: 60px;
-            border-radius: 60px;
-            border: 5px solid white;
-          }
-          ._caption {
-            padding: 0 20px;
-          }
-        }
-      }
-
-      &.-recent {
-        ._photo-details {
-          flex-direction: row-reverse;
-        }
-      }
-
-      ._subheading {
-        position: absolute;
-        bottom: 0;
-        padding: 10px;
-        font-size: 1.5em;
-        width: 100%;
-        box-sizing: border-box;
-      }
-    }
-  }
-}
+//._event-wrapper.-double {
+//
+//  ._header {
+//    display: flex;
+//    justify-content: space-between;
+//    align-items: center;
+//    width: 100%;
+//    padding: 30px;
+//    box-sizing: border-box;
+//    z-index: 2;
+//    font-size: 2.5em;
+//  }
+//
+//  ._title,
+//  ._hashtag {
+//    text-shadow: 0px 0px 15px rgba(0, 0, 0, 1);
+//  }
+//
+//  ._photos {
+//    display: flex;
+//    justify-content: space-around;
+//    flex-wrap: nowrap;
+//
+//    ._photo-wrapper {
+//      display: flex;
+//      flex-direction: column;
+//      position: relative;
+//      width: 640px;
+//      height: 684px;
+//
+//      ._photo-container {
+//        position: absolute;
+//        top: 0;
+//        left: 0;
+//        transition: 1.5s cubic-bezier(0, 0, 0.1, 1) all;
+//        opacity: 1;
+//        width: 640px;
+//        transform: translateZ(0);
+//
+//        &.ng-hide {
+//          opacity: 0;
+//        }
+//
+//        ._photo {
+//          border-radius: 10px;
+//          width: 640px;
+//        }
+//
+//        ._photo-details {
+//          display: flex;
+//          align-items: center;
+//          padding: 10px 20px;
+//          position: relative;
+//          top: -90px;
+//          margin-bottom: -90px;
+//          background-color: rgba(0, 0, 0, 0.5);
+//
+//          ._avatar {
+//            height: 60px;
+//            width: 60px;
+//            border-radius: 60px;
+//            border: 5px solid white;
+//          }
+//          ._caption {
+//            padding: 0 20px;
+//          }
+//        }
+//      }
+//
+//      &.-recent {
+//        ._photo-details {
+//          flex-direction: row-reverse;
+//        }
+//      }
+//
+//      ._subheading {
+//        position: absolute;
+//        bottom: 0;
+//        padding: 10px;
+//        font-size: 1.5em;
+//        width: 100%;
+//        box-sizing: border-box;
+//      }
+//    }
+//  }
+//}
 
 @media only screen
 and (min-device-width : 375px)

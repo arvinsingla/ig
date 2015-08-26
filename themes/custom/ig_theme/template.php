@@ -21,7 +21,7 @@ function ig_theme_form_alter(&$form, &$form_state, $form_id) {
       $form['submit']['#value'] = '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> ' . t('Submit');
       $form['submit']['#attributes'] = array(
         'class' => array(
-          'pull-right',
+          'hidden',
         ),
       );
       break;
